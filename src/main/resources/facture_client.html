@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <style>
+      /* reset.css */
+      /* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+      html,
+      body,
+      div,
+      span,
+      applet,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      blockquote,
+      pre,
+      a,
+      abbr,
+      acronym,
+      address,
+      big,
+      cite,
+      code,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      s,
+      samp,
+      small,
+      strike,
+      strong,
+      sub,
+      sup,
+      tt,
+      var,
+      b,
+      u,
+      i,
+      center,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      legend,
+      table,
+      caption,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      canvas,
+      details,
+      embed,
+      figure,
+      figcaption,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      output,
+      ruby,
+      section,
+      summary,
+      time,
+      mark,
+      audio,
+      video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      /* HTML5 display-role reset for older browsers */
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol,
+      ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:before,
+      blockquote:after,
+      q:before,
+      q:after {
+        content: "";
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+    </style>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        color: #000;
+        padding: 5px;
+        width: 680px;
+      }
+      .lignes_factures {
+        width: 100%;
+        margin-top: 5px;
+        padding-bottom: 100px;
+        border-collapse: separate;
+        border-spacing: 0px;
+
+        /*   border-width: 1px;
+        border-style: solid;
+        border-color: #26ad90;*/
+      }
+      .lignes_factures td {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #26ad90;
+      }
+      .no_border {
+        border-width: 0px !important;
+      }
+      .no_border td {
+        border-width: 0px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <table style="width:100%; height: 150px;">
+      <td style="width:300px;">
+        <img
+          src="https://transport-driver.kamtar-ci.com/img/logos/kt/ligne_vert_transparent.png"
+          style="width:189px; display:none;"
+        />
+      </td>
+      <td
+        style="color: #26ad90; font-size: 24px; text-align: right; font-weight: bold; display:none;"
+      >
+        FACTURE PROFORMA
+      </td>
+    </table>
+
+    <table style="width:100%;  margin-top:50px;">
+      <tr>
+        <td colspan="2">
+          <div
+            style="background-color: #26ad90; width:250px;padding:5px; color:#fff; font-weight: bold;"
+          >
+            Client
+          </div>
+          <div style="font-weight: bold; padding: 2px;">@CLIENT_NOM@</div>
+          <div style="padding: 2px;">@CLIENT_ADRESSE@</div>
+          <div style="padding: 2px;">@CLIENT_TEL@</div>
+          <div style="padding: 2px;">@CLIENT_EMAIL@</div>
+          <div style="padding: 2px;">@CLIENT_NCC@</div>
+        </td>
+        <td></td>
+        <td colspan="2">
+          <table style="">
+            <tr>
+              <td style="width: 100px;">Page:</td>
+              <td style="width: 100px;">@FACTURE_PAGE@</td>
+            </tr>
+            <tr>
+              <td style="width: 100px;">Date:</td>
+              <td style="width: 100px;">@FACTURE_DATE@</td>
+            </tr>
+            <tr>
+              <td style="width: 100px;">Date de validité:</td>
+              <td style="width: 100px;">@FACTURE_DATE_VALIDITE@</td>
+            </tr>
+            <tr>
+              <td style="width: 100px;">Facture #:</td>
+              <td style="width: 100px;">@FACTURE_NUMERO@</td>
+            </tr>
+            <tr>
+              <td style="width: 100px;">ID Client:</td>
+              <td style="width: 100px;">@FACTURE_ID_CLIENT@</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="width:50px;padding:5px; font-weight: bold;;"
+          colspan="2"
+        ></td>
+        <td></td>
+        <td colspan="2"></td>
+      </tr>
+      <tr></tr>
+    </table>
+
+    <table style="" class="lignes_factures">
+      <tr>
+        <td
+          style="width:80px;padding:5px;background-color: #26ad90;color:#fff;font-weight: bold;"
+        >
+          Date
+        </td>
+        <td
+          style="width:80px;padding:5px;background-color: #26ad90;color:#fff;font-weight: bold;"
+        >
+          Opération
+        </td>
+        <td
+          style="width:80px;padding:5px;background-color: #26ad90;color:#fff;font-weight: bold;"
+        >
+          Véhicule
+        </td>
+        <td
+          style="padding:5px;width:300px;background-color: #26ad90;color:#fff;font-weight: bold;"
+        >
+          Désignation / étapes
+        </td>
+        <td
+          style="width:110px;padding:5px;background-color: #26ad90;color:#fff;font-weight: bold;"
+        >
+          Montant (FCFA)
+        </td>
+      </tr>
+      @LIGNES_FACTURE@
+
+      <tr>
+        <td colspan="3" class="no_border" valign="top">
+          <table
+            style="width:100%; margin-top: 40px;border: 1px solid #26ad90;"
+          >
+            <tr>
+              <td
+                style="background-color: #26ad90;color:#fff;font-weight: bold;padding:5px;"
+              >
+                Notes spéciales, conditions de ventes
+              </td>
+            </tr>
+            <tr style="height: 100px">
+              <td style="border: 1px solid #26ad90;padding: 2px;">
+                @FACTURE_NOTES@
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td colspan="2" class="no_border">
+          <table
+            style="width:300px;margin-right: 0;margin-left: auto;"
+            class=""
+          >
+            <tr>
+              <td style="width:150px;padding:2px;text-align:right;">Montant HT:</td>
+              <td style="width:150px;padding:2px;text-align:right;">FCFA @MONTANT_HT@</td>
+            </tr>
+            <tr>
+              <td style="width:150px;padding:2px;text-align:right;">Remise (%):</td>
+              <td style="width:150px;padding:2px;text-align:right;">FCFA @REMISE@</td>
+            </tr>
+            <tr>
+              <td style="width:150px;padding:2px;text-align:right;">TVA (18%):</td>
+              <td style="width:150px;padding:2px;text-align:right;">FCFA @TVA@</td>
+            </tr>
+            <tr>
+              <td style="width:150px;padding:2px;text-align:right;">Montant TTC:</td>
+              <td style="width:150px;padding:2px;text-align:right;">FCFA @MONTANT_TTC@</td>
+            </tr>
+            <tr>
+              <td
+                style="border-top:2px solid black !important; padding:5px 2px;font-weight: bold;text-transform: uppercase;padding-top:5px;text-align:right;"
+              >
+                Net à payer
+              </td>
+              <td
+                style="width:150px;padding:2px;font-weight: bold;border-top:2px solid black  !important; padding-top:5px;text-align:right;"
+              >
+                FCFA @MONTANT_A_PAYER@
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div style="position: relative;">
+                  <div
+                    style="text-decoration: underline; margin-top:40px; position:absolute; font-size: 16px; color:#888"
+                  >
+                    Direction commerciale
+                  </div>
+                  <!--<img
+                    src="https://www.kamtar-ci.com/img/tampon.png"
+                    style="width:200px;"
+                    alt="Tampon"
+                  />-->
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

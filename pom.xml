@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>kamtar-transport-api</artifactId>
+	<version>0.0.3-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>kamtar-transport-api</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<!-- date en gmt zero -->
+		<spring-boot.run.jvmArguments>-Duser.timezone=UTC</spring-boot.run.jvmArguments>
+		<start-class>com.kamtar.transport.api.Application</start-class>
+		<tomcat.version>9.0.33</tomcat.version>
+	</properties>
+
+	<parent>
+		<groupId>com.wbc</groupId>
+		<artifactId>wbc-parent</artifactId>
+		<version>0.0.51-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>com.github.wvengen</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<proguardVersion>6.1.1</proguardVersion>
+					<injar>${project.build.finalName}.jar</injar>
+					<outjar>${project.build.finalName}.jar</outjar>
+					<obfuscate>true</obfuscate>
+					<options>
+						<option>-dontshrink</option>
+						<option>-dontoptimize</option>
+						<option>-ignorewarnings</option>
+						<!-- This option will replace all strings in reflections method invocations
+							with new class names. For example, invokes Class.forName('className') -->
+						<option>-adaptclassstrings</option>
+						<!-- This option will save all original annotations and etc. Otherwise
+							all we be removed from files. -->
+						<option>-keepattributes
+							Exceptions,InnerClasses,Signature,Deprecated,
+							SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>
+						<!-- This option will save all original names in interfaces (without
+							obfuscate). -->
+						<option>-keepnames interface **</option>
+						<!-- This option will save all original methods parameters in files
+							defined in -keep sections, otherwise all parameter names will be obfuscate. -->
+						<option>-keepparameternames</option>
+						<!-- This option will save all original class files (without obfuscate)
+							but obfuscate all in domain package. -->
+						<option>-keep class
+							!com.slm.proguard.example.spring.boot.domain.** { *; }</option>
+						<!-- This option will save all original class files (without obfuscate)
+							in service package -->
+						<!--<option>-keep class com.slm.proguard.example.spring.boot.service
+							{ *; }</option> -->
+						<!-- This option will save all original interfaces files (without obfuscate)
+							in all packages. -->
+						<option>-keep interface * extends * { *; }</option>
+						<!-- This option will save all original defined annotations in all
+							class in all packages. -->
+						<option>-keepclassmembers class * {
+							@org.springframework.beans.factory.annotation.Autowired *;
+							@org.springframework.beans.factory.annotation.Value *;
+							}
+						</option>
+					</options>
+					<libs>
+						<!-- Include main JAVA library required. -->
+						<lib>${java.home}/lib/rt.jar</lib>
+						<!-- Include crypto JAVA library if necessary. -->
+						<lib>${java.home}/lib/jce.jar</lib>
+					</libs>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.proguard</groupId>
+						<artifactId>proguard-base</artifactId>
+						<version>6.1.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<!-- à placer obligatoirement après le plugin proguard-maven-plugin -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.kamtar.transport.api.Application</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- SPRING -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<exclusions>
+				<!-- pour utiliser log4j à la place de logback -->
+				<exclusion>
+					<artifactId>spring-boot-starter-logging</artifactId>
+					<groupId>org.springframework.boot</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>3.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- SPRING JPA -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.zaxxer</groupId>
+					<artifactId>HikariCP</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>9.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.197</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- MYSQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.11</version>
+		</dependency>
+
+		<!-- JSON -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-collections</artifactId>
+					<groupId>commons-collections</groupId>
+				</exclusion>
+			</exclusions>
+			<type>jar</type>
+			<optional>false</optional>
+		</dependency>
+
+		<!-- jwt -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>1.0.9.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- bcrypt pour les mots de passe -->
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
+		</dependency>
+
+		<!-- JSON -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.gsonfire</groupId>
+			<artifactId>gson-fire</artifactId>
+			<version>1.9.0-alpha2</version>
+		</dependency>
+
+
+		<!-- trouve le mime d'un fichier -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.18</version>
+		</dependency>
+
+		<!-- lire un csv -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>4.1</version>
+		</dependency>
+
+		<!-- websockets -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+
+		<!-- html to pdf (pour les factures -->
+		<dependency>
+			<groupId>com.openhtmltopdf</groupId>
+			<artifactId>openhtmltopdf-pdfbox</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.openhtmltopdf</groupId>
+			<artifactId>openhtmltopdf-core</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<!-- export java en xls -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.opendevl</groupId>
+			<artifactId>json2flat</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.supercsv</groupId>
+			<artifactId>super-csv</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.dmfs</groupId>
+			<artifactId>lib-recur</artifactId>
+			<version>0.12.1</version>
+		</dependency>
+
+
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+		<repository>
+			<id>nuxeo</id>
+			<url>https://maven.nuxeo.org/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>osgeo</id>
+			<url>https://download.osgeo.org/webdav/geotools/</url>
+		</repository>
+		<repository>
+			<id>julman99-github</id>
+			<url>https://raw.github.com/julman99/mvn-repo/master</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>bintray</name>
+			<url>https://jcenter.bintray.com</url>
+		</repository>
+
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

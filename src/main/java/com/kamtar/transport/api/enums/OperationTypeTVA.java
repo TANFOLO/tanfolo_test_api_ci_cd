@@ -1,0 +1,13 @@
+package com.kamtar.transport.api.enums;
+
+public enum OperationTypeTVA {
+	LIVRAISON,
+	TRANSPORT_DE_MARCHANDISE,
+	LOCATION,
+	DÉMÉNAGEMENT,
+	MANUTENTION,
+	IMMOBILISATION,
+	FRAIS_DE_CARBURANT,
+	TRANSFERT_DE_DOSSIER
+}
+
