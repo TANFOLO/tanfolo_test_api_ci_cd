@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Publish') {
             steps {
-                bat 'mvn -U clean install'
+                bat 'mvn clean install'
             }
             post {
                 success {
